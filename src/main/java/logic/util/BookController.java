@@ -1,9 +1,12 @@
 package logic.util;
 
-import com.google.gson.JsonObject;
 import logic.domain.Book;
 
 public class BookController {
+
+    private BookController() {
+        //not called
+    }
 
     public static String getBook(String number) {
         for (Book book: Book.booksList) {

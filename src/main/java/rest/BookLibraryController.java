@@ -1,9 +1,6 @@
 package rest;
 
-import com.google.gson.JsonObject;
-import logic.domain.Book;
 import logic.util.BookController;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,8 +9,8 @@ import org.springframework.web.bind.annotation.*;
 public class BookLibraryController {
 
     @CrossOrigin(origins = "http://localhost:8080")
-    @RequestMapping(path = "/isbn/{number}", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<String> isbnNuber(@PathVariable String number) {
+    @GetMapping(path = "/isbn/{number}", produces = "application/json")
+    public ResponseEntity<String> getBookByIsbnNumber(@PathVariable String number) {
 
         String bookString = BookController.getBook(number);
         if (bookString != null) {
@@ -24,12 +21,17 @@ public class BookLibraryController {
 
     }
 
-    @CrossOrigin(origins = "http://localhost:4200")
-    @RequestMapping(path = "/category/{name}", method = RequestMethod.GET, produces = "application/json")
-    public void categoryName(@PathVariable String name) {
-
-        System.out.println("category " + name);
-
+    @CrossOrigin(origins = "http://localhost:8080")
+    @GetMapping(path = "/category/{name}", produces = "application/json")
+    public ResponseEntity<String> getBooksByCategory(@PathVariable String name) {
+        return new ResponseEntity<>("Categories in progress...", HttpStatus.OK);
     }
+
+    @CrossOrigin(origins = "http://localhost:8080")
+    @GetMapping(path = "/ratings", produces = "application/json")
+    public ResponseEntity<String> getRatings() {
+        return new ResponseEntity<>("Ratings in progress...", HttpStatus.OK);
+    }
+
 }
 
