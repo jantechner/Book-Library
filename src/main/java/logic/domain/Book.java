@@ -1,5 +1,10 @@
 package logic.domain;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -25,6 +30,12 @@ public final class Book {
     private String[] authors;
     private String[] categories;
 
+    public String toJsonString() {
+        Gson gson = new Gson();
+        return gson.toJson(this);
+    }
+
+
     public void show() {
         System.out.println(isbn + "\n" + title + "\n" +  subtitle + "\n" + publisher + "\n" + publishedDate + "\n" +
                 description + "\n" + pageCount + "\n" + thumbnailUrl + "\n" + language + "\n" + previewLink + "\n" +
@@ -39,7 +50,6 @@ public final class Book {
         System.out.println();
     }
 
-
     public void setIsbn(String isbn) {
         this.isbn = isbn;
     }
@@ -51,4 +61,10 @@ public final class Book {
     public void setThumbnailUrl(String thumbnailUrl) {
         this.thumbnailUrl = thumbnailUrl;
     }
+
+    public String getIsbn() {
+        return isbn;
+    }
+
+
 }
