@@ -24,11 +24,6 @@ public final class Book {
     private List<String> authors = new ArrayList<>();
     private List<String> categories = new ArrayList<>();
 
-    public String toJsonString() {
-        Gson gson = new GsonBuilder().create();
-        return gson.toJson(this);
-    }
-
     public void show() {
         System.out.println("------------------------------------");
         System.out.println(isbn + "\n" + title + "\n" +  subtitle + "\n" + publisher + "\n" + publishedDate + "\n" +
@@ -60,5 +55,7 @@ public final class Book {
         return isbn;
     }
 
-
+    public List<String> getCategories() {
+        return categories;
+    }
 }

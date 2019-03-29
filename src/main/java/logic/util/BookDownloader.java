@@ -3,6 +3,7 @@ package logic.util;
 import com.google.gson.*;
 import logic.domain.Book;
 
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -13,9 +14,15 @@ public class BookDownloader {
 
     private BookDownloader() {}
 
-    public static void getBooks(String sURL) throws IOException {
-        URLConnection request = connect(sURL);
-        JsonElement booksJson = getJSON(request);
+    public static void getBooks(String path) throws IOException {
+        JsonElement booksJson;
+        try {
+            URLConnection request = connect(path);
+            booksJson = getJSON(request);
+        } catch (IOException e) {
+            System.out.println("Can't connect to the remote database");
+            booksJson = getJSON(path);
+        }
         createBooks(booksJson);
     }
 
@@ -28,6 +35,10 @@ public class BookDownloader {
 
     private static JsonElement getJSON(URLConnection request) throws IOException {
         return new JsonParser().parse(new InputStreamReader((InputStream) request.getContent()));
+    }
+
+    private static JsonElement getJSON(String filepath) throws IOException {
+        return new JsonParser().parse(new FileReader(filepath));
     }
 
     private static void createBooks(JsonElement booksJson) {

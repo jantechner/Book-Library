@@ -12,8 +12,7 @@ public class BookLibraryApp {
 
     public static void main(String[] args) {
         try {
-            String sURL = "https://www.googleapis.com/books/v1/volumes?q=java&maxResults=40";
-            BookDownloader.getBooks(sURL);
+            BookDownloader.getBooks(args[0]);
             SpringApplication.run(BookLibraryApp.class, args);
         } catch (Exception e) {
             System.out.println(e);
