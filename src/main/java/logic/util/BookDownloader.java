@@ -2,6 +2,8 @@ package logic.util;
 
 import com.google.gson.*;
 import logic.domain.Book;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -13,6 +15,7 @@ import java.net.URLConnection;
 public class BookDownloader {
 
     private BookDownloader() {}
+    private static Logger logger = LoggerFactory.getLogger(BookDownloader.class);
 
     public static void getBooks(String path) throws IOException {
         JsonElement booksJson;
@@ -20,7 +23,7 @@ public class BookDownloader {
             URLConnection request = connect(path);
             booksJson = getJSON(request);
         } catch (IOException e) {
-            System.out.println("Can't connect to the remote database");
+            logger.info("Can't connect to the remote database");
             booksJson = getJSON(path);
         }
         createBooks(booksJson);
@@ -46,7 +49,7 @@ public class BookDownloader {
         JsonArray booksJsonElement = booksJson.getAsJsonObject().getAsJsonArray("items");
         for (JsonElement bookJsonElement : booksJsonElement) {
             Book book = gson.fromJson(bookJsonElement, Book.class);
-            Book.booksList.add(book);
+            Book.add(book);
         }
     }
 

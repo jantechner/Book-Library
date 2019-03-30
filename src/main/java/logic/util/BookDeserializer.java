@@ -2,6 +2,7 @@ package logic.util;
 
 import com.google.gson.*;
 import logic.domain.Book;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Type;
 import java.text.DateFormat;
@@ -84,7 +85,7 @@ public class BookDeserializer implements JsonDeserializer<Book> {
             try {
                 book.set(fieldName, dateFormat.parse(dateString).getTime() /*/ 1000*/);
             } catch (ParseException pe) {
-                System.out.println(pe.getStackTrace());
+                LoggerFactory.getLogger(BookDeserializer.class).error(pe.getMessage());
             }
         }
     }

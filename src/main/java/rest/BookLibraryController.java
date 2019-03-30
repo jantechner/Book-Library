@@ -31,7 +31,8 @@ public class BookLibraryController {
     @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping(path = "/ratings", produces = "application/json")
     public ResponseEntity<String> getRatings() {
-        return new ResponseEntity<>("Ratings in progress...", HttpStatus.OK);
+        String ratings = BookController.getAuthorsRatings();
+        return new ResponseEntity<>(ratings, HttpStatus.OK);
     }
 
     private ResponseEntity<String> error404() {
