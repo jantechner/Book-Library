@@ -16,7 +16,7 @@ public class BookLibraryController {
         if (bookString != null) {
             return new ResponseEntity<>(bookString, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>("404 Page not found ", HttpStatus.OK);
+            return error404();
         }
 
     }
@@ -24,13 +24,19 @@ public class BookLibraryController {
     @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping(path = "/category/{name}", produces = "application/json")
     public ResponseEntity<String> getBooksByCategory(@PathVariable String name) {
-        return new ResponseEntity<>("Categories in progress...", HttpStatus.OK);
+        String booksString = BookController.getBooksFromCategory(name);
+        return new ResponseEntity<>(booksString, HttpStatus.OK);
     }
 
     @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping(path = "/ratings", produces = "application/json")
     public ResponseEntity<String> getRatings() {
-        return new ResponseEntity<>("Ratings in progress...", HttpStatus.OK);
+        String ratings = BookController.getAuthorsRatings();
+        return new ResponseEntity<>(ratings, HttpStatus.OK);
+    }
+
+    private ResponseEntity<String> error404() {
+        return new ResponseEntity<>("404 Page not found ", HttpStatus.OK);
     }
 
 }
