@@ -16,7 +16,7 @@ public class BookLibraryController {
         if (bookString != null) {
             return new ResponseEntity<>(bookString, HttpStatus.OK);
         } else {
-            return error404();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
     }
@@ -33,10 +33,6 @@ public class BookLibraryController {
     public ResponseEntity<String> getRatings() {
         String ratings = BookController.getAuthorsRatings();
         return new ResponseEntity<>(ratings, HttpStatus.OK);
-    }
-
-    private ResponseEntity<String> error404() {
-        return new ResponseEntity<>("404 Page not found ", HttpStatus.OK);
     }
 
 }

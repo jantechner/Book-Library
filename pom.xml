@@ -38,7 +38,7 @@
     </dependencies>
 
     <build>
-        <finalName>ScenarioQualityChecker</finalName>
+        <finalName>BookLibrary</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

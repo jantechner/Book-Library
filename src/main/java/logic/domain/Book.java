@@ -24,23 +24,6 @@ public final class Book {
     private List<String> authors = new ArrayList<>();
     private List<String> categories = new ArrayList<>();
 
-//    public void show() {
-//        System.out.println("------------------------------------");
-//        System.out.println(isbn + "\n" + title + "\n" +  subtitle + "\n" + publisher + "\n" + publishedDate + "\n" +
-//                description + "\n" + pageCount + "\n" + thumbnailUrl + "\n" + language + "\n" + previewLink + "\n" +
-//                averageRating);
-//        for (String author: authors) {
-//            System.out.print(author + " ");
-//        }
-//        System.out.println();
-//        for (String category: categories) {
-//            System.out.print(category + " ");
-//        }
-//        System.out.println();
-//        System.out.println("------------------------------------");
-//        System.out.println();
-//    }
-
     public <T> void set(String name, T value) {
         try {
             Field field = Book.class.getDeclaredField(name);
