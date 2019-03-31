@@ -22,27 +22,29 @@ public class BookController {
 
     public static String getBooksFromCategory(String requiredCategory) {
         List<Book> booksFromCategory = new ArrayList<>();
-        Book.getList().forEach(book ->
-            book.getCategories().forEach(category -> {
-                if (category.equals(requiredCategory)) {
-                    booksFromCategory.add(book);
+        Book.getList().forEach(book -> {
+            if (book.getCategories() != null) {
+                for (String category : book.getCategories()) {
+                    if (category.equals(requiredCategory)) {
+                        booksFromCategory.add(book);
+                    }
                 }
-            })
-        );
+            }
+        });
         return JSONUtils.toJsonString(booksFromCategory);
     }
 
     public static String getAuthorsRatings() {
         Map<String, Rating> map = new HashMap<>();
         Book.getList().forEach(book -> {
-            if (book.getRating() != null) {
-                book.getAuthors().forEach(author -> {
+            if (book.getRating() != null && book.getAuthors() != null) {
+                for(String author : book.getAuthors()) {
                     if (!map.containsKey(author)) {
                         map.put(author, new Rating(book.getRating()));
                     } else {
                         map.get(author).updateRatings(book.getRating());
                     }
-                });
+                }
             }
         });
         List<AuthorRating> authorsRatingList =  map.entrySet()

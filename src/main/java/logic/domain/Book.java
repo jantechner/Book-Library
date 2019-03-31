@@ -21,10 +21,10 @@ public final class Book {
     private String language = null;
     private String previewLink = null;
     private Double averageRating = null;
-    private List<String> authors = new ArrayList<>();
-    private List<String> categories = new ArrayList<>();
+    private String[] authors = null;
+    private String[] categories = null;
 
-    public <T> void set(String name, T value) {
+    public void set(String name, Object value) {
         try {
             Field field = Book.class.getDeclaredField(name);
             field.setAccessible(true);
@@ -38,11 +38,11 @@ public final class Book {
         return isbn;
     }
 
-    public List<String> getCategories() {
+    public String[] getCategories() {
         return categories;
     }
 
-    public List<String> getAuthors() {
+    public String[] getAuthors() {
         return authors;
     }
 

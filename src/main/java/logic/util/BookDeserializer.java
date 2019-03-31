@@ -39,7 +39,8 @@ public class BookDeserializer implements JsonDeserializer<Book> {
             if (volumeinfo.get(field) != null) {
                 List<String> list = new ArrayList<>();
                 volumeinfo.get(field).getAsJsonArray().forEach(element -> list.add(element.getAsString()));
-                book.set(field, list);
+                String[] array = list.toArray(new String[0]);
+                book.set(field, array);
             }
         }
 
