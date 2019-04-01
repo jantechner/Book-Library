@@ -1,27 +1,37 @@
 package logic.domain;
 
+import com.google.gson.annotations.Expose;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
 
 public final class Book {
 
-    private static List<Book> booksList = new ArrayList<>();
-
+    @Expose
     private String isbn = null;
+    @Expose
     private String title = null;
+    @Expose
     private String subtitle = null;
+    @Expose
     private String publisher = null;
+    @Expose
     private Long publishedDate = null;
+    @Expose
     private String description = null;
+    @Expose
     private Integer pageCount = null;
+    @Expose
     private String thumbnailUrl = null;
+    @Expose
     private String language = null;
+    @Expose
     private String previewLink = null;
+    @Expose
     private Double averageRating = null;
+    @Expose
     private String[] authors = null;
+    @Expose
     private String[] categories = null;
 
     public void set(String name, Object value) {
@@ -48,13 +58,5 @@ public final class Book {
 
     public Double getRating() {
         return averageRating;
-    }
-
-    public static List<Book> getList() {
-        return booksList;
-    }
-
-    public static void add(Book book) {
-        booksList.add(book);
     }
 }

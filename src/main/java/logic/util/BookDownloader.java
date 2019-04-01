@@ -2,6 +2,7 @@ package logic.util;
 
 import com.google.gson.*;
 import logic.domain.Book;
+import logic.domain.Library;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,23 +18,14 @@ public class BookDownloader {
     private BookDownloader() {}
     private static Logger logger = LoggerFactory.getLogger(BookDownloader.class);
 
-    public static void getBooks(String path) throws IOException {
-        JsonElement booksJson;
-        try {
-            URLConnection request = connect(path);
-            booksJson = getJSON(request);
-        } catch (IOException e) {
-            logger.info("Can't connect to the remote database");
-            booksJson = getJSON(path);
+    public static void getLibrary(String[] args) throws IOException {
+        JsonElement file = getJSON(args[0]);
+        if (args[1].equals("remote")) {
+            String url = file.getAsJsonObject().get("requestedUrl").getAsString();
+            URLConnection request = connect(url);
+            file = getJSON(request);
         }
-        createBooks(booksJson);
-    }
-
-    private static URLConnection connect(String sURL) throws IOException {
-        URL url = new URL(sURL);
-        URLConnection request = url.openConnection();
-        request.connect();
-        return request;
+        createBooks(file);
     }
 
     private static JsonElement getJSON(URLConnection request) throws IOException {
@@ -44,12 +36,19 @@ public class BookDownloader {
         return new JsonParser().parse(new FileReader(filepath));
     }
 
+    private static URLConnection connect(String sURL) throws IOException {
+        URL url = new URL(sURL);
+        URLConnection request = url.openConnection();
+        request.connect();
+        return request;
+    }
+
     private static void createBooks(JsonElement booksJson) {
         Gson gson = new GsonBuilder().registerTypeAdapter(Book.class, new BookDeserializer()).create();
         JsonArray booksJsonElement = booksJson.getAsJsonObject().getAsJsonArray("items");
         for (JsonElement bookJsonElement : booksJsonElement) {
             Book book = gson.fromJson(bookJsonElement, Book.class);
-            Book.add(book);
+            Library.add(book);
         }
     }
 

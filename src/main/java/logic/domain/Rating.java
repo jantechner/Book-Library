@@ -1,12 +1,18 @@
 package logic.domain;
 
+import com.google.gson.annotations.Expose;
+
 public class Rating {
 
+    @Expose
+    private String author;
+    @Expose
     private Double average;
     private Double ratingsSum;
     private int ratingsNumber;
 
-    public Rating(Double rating) {
+    public Rating(Double rating, String author) {
+        this.author = author;
         this.average = rating;
         this.ratingsSum = rating;
         this.ratingsNumber = 1;

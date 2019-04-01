@@ -13,12 +13,17 @@ final class JSONUtils {
     private JSONUtils() {}
 
     static String toJsonString(Book book) {
-        Gson gson = new GsonBuilder().create();
-        return gson.toJson(book);
+        if (book != null) {
+            Gson gson = new GsonBuilder().create();
+            return gson.toJson(book);
+        } else {
+            return null;
+        }
     }
 
+
     static <T> String toJsonString(List<T> list) {
-        Gson gson = new GsonBuilder().create();
+        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         Type listType = new TypeToken<ArrayList<T>>(){}.getType();
         return gson.toJson(list, listType);
     }
