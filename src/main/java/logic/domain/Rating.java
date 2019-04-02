@@ -2,12 +2,14 @@ package logic.domain;
 
 public class Rating {
 
-    private Double average;
+    private String author;
+    private Double averageRating;
     private Double ratingsSum;
-    private int ratingsNumber;
+    private Integer ratingsNumber;
 
-    public Rating(Double rating) {
-        this.average = rating;
+    public Rating(Double rating, String author) {
+        this.author = author;
+        this.averageRating = rating;
         this.ratingsSum = rating;
         this.ratingsNumber = 1;
     }
@@ -15,10 +17,15 @@ public class Rating {
     public void updateRatings(Double rating) {
         this.ratingsSum += rating;
         this.ratingsNumber += 1;
-        this.average = this.ratingsSum/this.ratingsNumber;
+        this.averageRating = this.ratingsSum/this.ratingsNumber;
     }
 
-    public Double getAverage() {
-        return average;
+    public Double getAverageRating() {
+        return averageRating;
+    }
+
+    public void eraseUnnecessaryValues() {
+        ratingsNumber = null;
+        ratingsSum = null;
     }
 }

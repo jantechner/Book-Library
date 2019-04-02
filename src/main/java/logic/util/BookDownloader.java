@@ -1,9 +1,7 @@
 package logic.util;
 
 import com.google.gson.*;
-import logic.domain.Book;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import logic.domain.Library;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -15,42 +13,28 @@ import java.net.URLConnection;
 public class BookDownloader {
 
     private BookDownloader() {}
-    private static Logger logger = LoggerFactory.getLogger(BookDownloader.class);
 
-    public static void getBooks(String path) throws IOException {
-        JsonElement booksJson;
-        try {
-            URLConnection request = connect(path);
-            booksJson = getJSON(request);
-        } catch (IOException e) {
-            logger.info("Can't connect to the remote database");
-            booksJson = getJSON(path);
+    public static void getLibrary(String[] args) throws IOException {
+        JsonObject jsonFile = getJsonFile(args[0]);
+        if (args[1].equals("remote")) {
+            String remoteURL = jsonFile.get("requestedUrl").getAsString();
+            URLConnection request = connect(remoteURL);
+            jsonFile = getJsonFile(request);
         }
-        createBooks(booksJson);
+        Library.get().add(JsonUtils.extractBooks(jsonFile));
     }
 
-    private static URLConnection connect(String sURL) throws IOException {
-        URL url = new URL(sURL);
-        URLConnection request = url.openConnection();
+    private static JsonObject getJsonFile(URLConnection request) throws IOException {
+        return new JsonParser().parse(new InputStreamReader((InputStream) request.getContent())).getAsJsonObject();
+    }
+
+    private static JsonObject getJsonFile(String filepath) throws IOException {
+        return new JsonParser().parse(new FileReader(filepath)).getAsJsonObject();
+    }
+
+    private static URLConnection connect(String url) throws IOException {
+        URLConnection request = new URL(url).openConnection();
         request.connect();
         return request;
     }
-
-    private static JsonElement getJSON(URLConnection request) throws IOException {
-        return new JsonParser().parse(new InputStreamReader((InputStream) request.getContent()));
-    }
-
-    private static JsonElement getJSON(String filepath) throws IOException {
-        return new JsonParser().parse(new FileReader(filepath));
-    }
-
-    private static void createBooks(JsonElement booksJson) {
-        Gson gson = new GsonBuilder().registerTypeAdapter(Book.class, new BookDeserializer()).create();
-        JsonArray booksJsonElement = booksJson.getAsJsonObject().getAsJsonArray("items");
-        for (JsonElement bookJsonElement : booksJsonElement) {
-            Book book = gson.fromJson(bookJsonElement, Book.class);
-            Book.add(book);
-        }
-    }
-
 }

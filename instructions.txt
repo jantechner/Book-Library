@@ -1,0 +1,9 @@
+Building
+
+To build the project use following command:
+mvn package clean
+
+Running
+
+After building the application run following command to start it:
+java -jar target/BookLibrary.jar
