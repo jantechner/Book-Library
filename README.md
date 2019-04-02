@@ -6,7 +6,7 @@ Book Library Application is a book library management platform. It enables user 
 
 The app is written in Java using Spring Boot framework and REST architectural style. It managed by Maven project management tool. Endpoints are covered with unit tests held by JUnit4 library. Additionally the syntax in checked with SonarLint extension. The JSON files processing (serialization and deserialization) is done by GSON library privided by Google.
 
-#####Design Patterns
+##### Design Patterns
 
 In the app there are 3 Design Patterns used:
 
@@ -14,7 +14,7 @@ In the app there are 3 Design Patterns used:
 - Singleton Pattern - to create only one Library object holding all available Books and to provide easy access to it
 - Visitor Pattern - to separate objects processing from the objects and allow for adding new functionalities to the app without changing the structure of objects
 
-#####Running the application
+##### Running the application
 
 To run the applicaton firstly run `mvn clean package` command. Then simply run `java -jar target/BookLibrary.jar src/main/resources/books.json file` (reading books from file) or `java -jar target/BookLibrary.jar src/main/resources/books.json remote` (reading book from Google Books API). When the program starts, the WEB API is avaliable in the browser under `localhost:8080` domain.
 
