@@ -10,9 +10,9 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 
-public class BookDownloader {
+public class Downloader {
 
-    private BookDownloader() {}
+    private Downloader() {}
 
     public static void getLibrary(String[] args) throws IOException {
         JsonObject jsonFile = getJsonFile(args[0]);
