@@ -1,9 +1,10 @@
-package logic.util;
+package logic.util.downloader;
 
 import com.google.gson.*;
 import logic.domain.Book;
-import logic.domain.BookBuilder;
 import logic.domain.Library;
+import logic.util.BookDeserializer;
+import org.springframework.core.annotation.Order;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -17,6 +18,7 @@ public class BookDownloader {
     private BookDownloader() {}
 
     public static void getLibrary(String[] args) throws IOException {
+
         JsonElement file = getJSONFile(args[0]);
         if (args[1].equals("remote")) {
             String url = file.getAsJsonObject().get("requestedUrl").getAsString();
@@ -41,11 +43,11 @@ public class BookDownloader {
     }
 
     private static void createBooks(JsonElement booksJson) {
-        Gson gson = new GsonBuilder().registerTypeAdapter(Book.class, new BookDeserializer()).create();
+
         JsonArray booksJsonElement = booksJson.getAsJsonObject().getAsJsonArray("items");
         for (JsonElement bookJsonElement : booksJsonElement) {
-            Book book = gson.fromJson(bookJsonElement, Book.class);
-            Library.add(book);
+            Book book = JSON
+            Library.get().add(book);
         }
     }
 

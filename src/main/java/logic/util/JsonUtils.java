@@ -27,4 +27,14 @@ final class JSONUtils {
         return gson.toJson(list, listType);
     }
 
+    static List<Book> extractBooks(JsonElement booksJson) {
+        List<Book> books = new ArrayList<>();
+        Gson gson = new GsonBuilder().registerTypeAdapter(Book.class, new BookDeserializer()).create();
+        JsonArray booksJsonElement = booksJson.getAsJsonObject().getAsJsonArray("items");
+        for (JsonElement bookJsonElement: booksJsonElement) {
+            books.add(gson.fromJson(bookJsonElement, Book.class));
+        }
+        return books;
+    }
+
 }
