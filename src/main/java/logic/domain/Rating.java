@@ -1,19 +1,15 @@
 package logic.domain;
 
-import com.google.gson.annotations.Expose;
-
 public class Rating {
 
-    @Expose
     private String author;
-    @Expose
-    private Double average;
+    private Double averageRating;
     private Double ratingsSum;
-    private int ratingsNumber;
+    private Integer ratingsNumber;
 
     public Rating(Double rating, String author) {
         this.author = author;
-        this.average = rating;
+        this.averageRating = rating;
         this.ratingsSum = rating;
         this.ratingsNumber = 1;
     }
@@ -21,10 +17,15 @@ public class Rating {
     public void updateRatings(Double rating) {
         this.ratingsSum += rating;
         this.ratingsNumber += 1;
-        this.average = this.ratingsSum/this.ratingsNumber;
+        this.averageRating = this.ratingsSum/this.ratingsNumber;
     }
 
-    public Double getAverage() {
-        return average;
+    public Double getAverageRating() {
+        return averageRating;
+    }
+
+    public void eraseUnnecessaryValues() {
+        ratingsNumber = null;
+        ratingsSum = null;
     }
 }

@@ -2,6 +2,7 @@ package logic.util;
 
 import com.google.gson.*;
 import logic.domain.Book;
+import logic.domain.BookBuilder;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Type;
@@ -12,25 +13,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BookDeserializer implements JsonDeserializer<Book> {
+
     @Override
     public Book deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) {
 
-
         JsonObject volumeinfo = jsonElement.getAsJsonObject().get("volumeInfo").getAsJsonObject();
 
-        Book book = new Gson().fromJson(jsonElement.getAsJsonObject(), Book.class);
+        BookBuilder bookBuilder = new BookBuilder();
 
-        setISBN(book, volumeinfo, jsonElement);
-        setPublishedDate(book, volumeinfo);
+        setISBN(bookBuilder, volumeinfo, jsonElement);
+        setPublishedDate(bookBuilder, volumeinfo);
 
         if (volumeinfo.get("imageLinks") != null) {
-            book.set("thumbnailUrl", volumeinfo.get("imageLinks").getAsJsonObject().get("thumbnail").getAsString());
+            bookBuilder.add("thumbnailUrl", volumeinfo.get("imageLinks").getAsJsonObject().get("thumbnail").getAsString());
         }
 
         String[] fields = {"title", "subtitle", "publisher", "description", "language", "previewLink",};
         for (String field : fields) {
             if (volumeinfo.get(field) != null) {
-                book.set(field, volumeinfo.get(field).getAsString());
+                bookBuilder.add(field, volumeinfo.get(field).getAsString());
             }
         }
 
@@ -40,38 +41,40 @@ public class BookDeserializer implements JsonDeserializer<Book> {
                 List<String> list = new ArrayList<>();
                 volumeinfo.get(field).getAsJsonArray().forEach(element -> list.add(element.getAsString()));
                 String[] array = list.toArray(new String[0]);
-                book.set(field, array);
+                bookBuilder.add(field, array);
             }
         }
 
         String fieldName = "pageCount";
         if (volumeinfo.get(fieldName) != null) {
-            book.set(fieldName, volumeinfo.get(fieldName).getAsInt());
+            bookBuilder.add(fieldName, volumeinfo.get(fieldName).getAsInt());
         }
 
         fieldName = "averageRating";
         if (volumeinfo.get(fieldName) != null) {
-            book.set(fieldName, volumeinfo.get(fieldName).getAsDouble());
+            bookBuilder.add(fieldName, volumeinfo.get(fieldName).getAsDouble());
         }
 
-        return book;
+        return bookBuilder.createBook();
     }
 
-    private void setISBN(Book book, JsonObject volumeinfo, JsonElement jsonElement) {
+    private void setISBN(BookBuilder bookBuilder, JsonObject volumeinfo, JsonElement jsonElement) {
         JsonArray identifiers = volumeinfo.get("industryIdentifiers").getAsJsonArray();
+        boolean foundISBN13 = false;
         if (identifiers != null) {
             for (JsonElement identifier : identifiers) {
                 if (identifier.getAsJsonObject().get("type").getAsString().equals("ISBN_13")) {
-                    book.set("isbn", identifier.getAsJsonObject().get("identifier").getAsString());
+                    bookBuilder.add("isbn", identifier.getAsJsonObject().get("identifier").getAsString());
+                    foundISBN13 = true;
                 }
             }
-            if (book.getIsbn() == null) {
-                book.set("isbn", jsonElement.getAsJsonObject().get("id").getAsString());
+            if (!foundISBN13) {
+                bookBuilder.add("isbn", jsonElement.getAsJsonObject().get("id").getAsString());
             }
         }
     }
 
-    private void setPublishedDate(Book book, JsonObject volumeinfo) {
+    private void setPublishedDate(BookBuilder bookBuilder, JsonObject volumeinfo) {
         String fieldName = "publishedDate";
         if (volumeinfo.get(fieldName) != null) {
             String dateString = volumeinfo.get(fieldName).getAsString();
@@ -84,10 +87,11 @@ public class BookDeserializer implements JsonDeserializer<Book> {
                 default: dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             }
             try {
-                book.set(fieldName, dateFormat.parse(dateString).getTime() /*/ 1000*/);
+                bookBuilder.add(fieldName, dateFormat.parse(dateString).getTime());
             } catch (ParseException pe) {
                 LoggerFactory.getLogger(BookDeserializer.class).error(pe.getMessage());
             }
         }
+
     }
 }

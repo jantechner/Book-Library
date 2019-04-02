@@ -1,6 +1,7 @@
 package logic.util;
 
 import logic.domain.Book;
+import logic.domain.BookBuilder;
 import logic.domain.Library;
 import logic.domain.Rating;
 import org.junit.Before;
@@ -13,37 +14,42 @@ import static org.junit.Assert.*;
 public class LibraryControllerTest {
 
     private static boolean setUpIsDone = false;
-    static Book book1, book2, book3, book4;
-    static Library library;
+    private static Book book1;
+    private static Book book2;
+    private static Book book3;
+    private static Book book4;
 
     @Before
     public void initialize() {
-        if (setUpIsDone) {
-            return;
-        } else {
-            book1 = new Book();
-            book1.set("isbn", "123456789");
-            book1.set("averageRating", 5.0);
-            book1.set("authors", new String[]{"John ABC", "George Eliot"});
-            book1.set("categories", new String[]{"Computers", "Java"});
-            library.add(book1);
+        if (!setUpIsDone) {
+            book1 = new BookBuilder()
+                    .add("isbn", "123456789")
+                    .add("averageRating", 5.0)
+                    .add("authors", new String[]{"John ABC", "George Eliot"})
+                    .add("categories", new String[]{"Computers", "Java"})
+                    .createBook();
+            Library.add(book1);
 
-            book2 = new Book();
-            book2.set("isbn", "biMiAQAAIAAJ");
-            book2.set("authors", new String[]{"George Eliot"});
-            book2.set("categories", new String[]{"Computers", "C++"});
-            library.add(book2);
+            book2 = new BookBuilder()
+                    .add("isbn", "biMiAQAAIAAJ")
+                    .add("authors", new String[]{"George Eliot"})
+                    .add("categories", new String[]{"Computers", "C++"})
+                    .createBook();
+            Library.add(book2);
 
-            book3 = new Book();
-            book3.set("isbn", "9789793780146");
-            book3.set("averageRating", 4.5);
-            book3.set("authors", new String[]{"Lewis Carroll", "John ABC"});
-            library.add(book3);
 
-            book4 = new Book();
-            book4.set("isbn", "97897");
-            book4.set("authors", new String[]{"Robert Browning", "William Allingham"});
-            library.add(book4);
+            book3 = new BookBuilder()
+                    .add("isbn", "9789793780146")
+                    .add("averageRating", 4.5)
+                    .add("authors", new String[]{"Lewis Carroll", "John ABC"})
+                    .createBook();
+            Library.add(book3);
+
+            book4 = new BookBuilder()
+                    .add("isbn", "97897")
+                    .add("authors", new String[]{"Robert Browning", "William Allingham"})
+                    .createBook();
+            Library.add(book4);
 
             setUpIsDone = true;
         }
@@ -77,6 +83,7 @@ public class LibraryControllerTest {
         assertNull(LibraryController.getBookAsString("sdaa"));
     }
 
+
     @Test public void findBooksFromCategory1() {
         List<Book> resultList = new ArrayList<>();
         resultList.add(book1);
@@ -108,9 +115,9 @@ public class LibraryControllerTest {
         assertTrue(map.containsKey("Lewis Carroll"));
         assertFalse(map.containsKey("Robert Browning"));
         assertFalse(map.containsKey("William Allingham"));
-        assertEquals((Double) 4.75, map.get("John ABC").getAverage());
-        assertEquals( (Double) 5.0, map.get("George Eliot").getAverage());
-        assertEquals( (Double) 4.5, map.get("Lewis Carroll").getAverage());
+        assertEquals((Double) 4.75, map.get("John ABC").getAverageRating());
+        assertEquals( (Double) 5.0, map.get("George Eliot").getAverageRating());
+        assertEquals( (Double) 4.5, map.get("Lewis Carroll").getAverageRating());
     }
 
 }

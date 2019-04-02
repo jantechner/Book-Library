@@ -70,6 +70,7 @@ public class LibraryController {
     private static List<Rating> convertMapToList (Map<String, Rating> map) {
         return map.entrySet()
                 .stream()
+                .peek(entry -> entry.getValue().eraseUnnecessaryValues())
                 .map(Map.Entry::getValue)
                 .collect(Collectors.toList());
     }

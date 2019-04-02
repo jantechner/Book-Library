@@ -2,9 +2,8 @@ package logic.util;
 
 import com.google.gson.*;
 import logic.domain.Book;
+import logic.domain.BookBuilder;
 import logic.domain.Library;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -16,10 +15,9 @@ import java.net.URLConnection;
 public class BookDownloader {
 
     private BookDownloader() {}
-    private static Logger logger = LoggerFactory.getLogger(BookDownloader.class);
 
     public static void getLibrary(String[] args) throws IOException {
-        JsonElement file = getJSON(args[0]);
+        JsonElement file = getJSONFile(args[0]);
         if (args[1].equals("remote")) {
             String url = file.getAsJsonObject().get("requestedUrl").getAsString();
             URLConnection request = connect(url);
@@ -32,13 +30,12 @@ public class BookDownloader {
         return new JsonParser().parse(new InputStreamReader((InputStream) request.getContent()));
     }
 
-    private static JsonElement getJSON(String filepath) throws IOException {
+    private static JsonElement getJSONFile(String filepath) throws IOException {
         return new JsonParser().parse(new FileReader(filepath));
     }
 
-    private static URLConnection connect(String sURL) throws IOException {
-        URL url = new URL(sURL);
-        URLConnection request = url.openConnection();
+    private static URLConnection connect(String url) throws IOException {
+        URLConnection request = new URL(url).openConnection();
         request.connect();
         return request;
     }

@@ -21,9 +21,8 @@ final class JSONUtils {
         }
     }
 
-
     static <T> String toJsonString(List<T> list) {
-        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+        Gson gson = new GsonBuilder().create();
         Type listType = new TypeToken<ArrayList<T>>(){}.getType();
         return gson.toJson(list, listType);
     }
