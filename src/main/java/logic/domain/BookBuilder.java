@@ -1,13 +1,12 @@
 package logic.domain;
 
 import org.slf4j.LoggerFactory;
-
 import java.lang.reflect.Field;
 
 public class BookBuilder {
 
     String isbn = null;
-    public String title = null;
+    String title = null;
     String subtitle = null;
     String publisher = null;
     Long publishedDate = null;
@@ -21,16 +20,13 @@ public class BookBuilder {
     String[] categories = null;
 
     public BookBuilder() {
-
     }
 
     public BookBuilder add(String name, Object value) {
         try {
-            if (value != null) {
-                Field field = BookBuilder.class.getDeclaredField(name);
-                field.setAccessible(true);
-                field.set(this, value);
-            }
+            Field field = BookBuilder.class.getDeclaredField(name);
+            field.setAccessible(true);
+            field.set(this, value);
         } catch (Exception e) {
             LoggerFactory.getLogger(Book.class).error(e.getMessage());
         }

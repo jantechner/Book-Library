@@ -1,10 +1,7 @@
-package logic.util.downloader;
+package logic.util;
 
 import com.google.gson.*;
-import logic.domain.Book;
 import logic.domain.Library;
-import logic.util.BookDeserializer;
-import org.springframework.core.annotation.Order;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -18,22 +15,21 @@ public class BookDownloader {
     private BookDownloader() {}
 
     public static void getLibrary(String[] args) throws IOException {
-
-        JsonElement file = getJSONFile(args[0]);
+        JsonObject jsonFile = getJsonFile(args[0]);
         if (args[1].equals("remote")) {
-            String url = file.getAsJsonObject().get("requestedUrl").getAsString();
-            URLConnection request = connect(url);
-            file = getJSON(request);
+            String remoteURL = jsonFile.get("requestedUrl").getAsString();
+            URLConnection request = connect(remoteURL);
+            jsonFile = getJsonFile(request);
         }
-        createBooks(file);
+        Library.get().add(JsonUtils.extractBooks(jsonFile));
     }
 
-    private static JsonElement getJSON(URLConnection request) throws IOException {
-        return new JsonParser().parse(new InputStreamReader((InputStream) request.getContent()));
+    private static JsonObject getJsonFile(URLConnection request) throws IOException {
+        return new JsonParser().parse(new InputStreamReader((InputStream) request.getContent())).getAsJsonObject();
     }
 
-    private static JsonElement getJSONFile(String filepath) throws IOException {
-        return new JsonParser().parse(new FileReader(filepath));
+    private static JsonObject getJsonFile(String filepath) throws IOException {
+        return new JsonParser().parse(new FileReader(filepath)).getAsJsonObject();
     }
 
     private static URLConnection connect(String url) throws IOException {
@@ -41,14 +37,4 @@ public class BookDownloader {
         request.connect();
         return request;
     }
-
-    private static void createBooks(JsonElement booksJson) {
-
-        JsonArray booksJsonElement = booksJson.getAsJsonObject().getAsJsonArray("items");
-        for (JsonElement bookJsonElement : booksJsonElement) {
-            Book book = JSON
-            Library.get().add(book);
-        }
-    }
-
 }

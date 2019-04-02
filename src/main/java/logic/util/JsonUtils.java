@@ -8,11 +8,11 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-final class JSONUtils {
+public final class JsonUtils {
 
-    private JSONUtils() {}
+    private JsonUtils() {}
 
-    static String toJsonString(Book book) {
+    public static String toJsonString(Book book) {
         if (book != null) {
             Gson gson = new GsonBuilder().create();
             return gson.toJson(book);
@@ -21,18 +21,18 @@ final class JSONUtils {
         }
     }
 
-    static <T> String toJsonString(List<T> list) {
+    public static <T> String toJsonString(List<T> list) {
         Gson gson = new GsonBuilder().create();
         Type listType = new TypeToken<ArrayList<T>>(){}.getType();
         return gson.toJson(list, listType);
     }
 
-    static List<Book> extractBooks(JsonElement booksJson) {
+    public static List<Book> extractBooks(JsonObject jsonFile) {
         List<Book> books = new ArrayList<>();
         Gson gson = new GsonBuilder().registerTypeAdapter(Book.class, new BookDeserializer()).create();
-        JsonArray booksJsonElement = booksJson.getAsJsonObject().getAsJsonArray("items");
-        for (JsonElement bookJsonElement: booksJsonElement) {
-            books.add(gson.fromJson(bookJsonElement, Book.class));
+        JsonArray jsonBooksArray = jsonFile.getAsJsonArray("items");
+        for (JsonElement jsonBook: jsonBooksArray) {
+            books.add(gson.fromJson(jsonBook, Book.class));
         }
         return books;
     }
