@@ -3,6 +3,8 @@ package logic.visitor;
 import logic.domain.Library;
 import logic.domain.Rating;
 import logic.util.JsonUtils;
+
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +38,7 @@ public class GetRatingsVisitor implements Visitor{
     private List<Rating> convertMapToList (Map<String, Rating> map) {
         return map.entrySet()
                 .stream()
+                .sorted(Comparator.comparingDouble(e -> -1 * e.getValue().getAverageRating()))
                 .peek(entry -> entry.getValue().eraseUnnecessaryValues())
                 .map(Map.Entry::getValue)
                 .collect(Collectors.toList());
