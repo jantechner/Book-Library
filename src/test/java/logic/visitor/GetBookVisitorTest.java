@@ -16,6 +16,7 @@ public class GetBookVisitorTest {
     @Before
     public void initialize() {
         if (!setUpIsDone) {
+            Library.get().clear();
             Book book1 = new BookBuilder()
                     .add("isbn", "123456789")
                     .add("averageRating", 5.0)

@@ -32,6 +32,10 @@ public class Library implements Visitable {
         return books;
     }
 
+    public void clear() {
+        books = new ArrayList<>();
+    }
+
     @Override
     public void accept(Visitor visitor) {
         visitor.visit(this);
