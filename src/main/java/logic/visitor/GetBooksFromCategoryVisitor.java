@@ -17,21 +17,16 @@ public class GetBooksFromCategoryVisitor implements Visitor{
 
     @Override
     public String visit(Library library) {
-        List<Book> booksFromCategory = findBooksFromCategory(requiredCategory, library);
-        return JsonUtils.toJsonString(booksFromCategory);
-    }
-
-    private List<Book> findBooksFromCategory(String requiredCategory, Library library) {
-        List<Book> booksFromCategory = new ArrayList<>();
+        List<Book> booksFromRequiredCategory = new ArrayList<>();
         library.books().forEach(book -> {
             if (book.getCategories() != null) {
                 for (String category : book.getCategories()) {
                     if (category.equals(requiredCategory)) {
-                        booksFromCategory.add(book);
+                        booksFromRequiredCategory.add(book);
                     }
                 }
             }
         });
-        return booksFromCategory;
+        return JsonUtils.toJsonString(booksFromRequiredCategory);
     }
 }

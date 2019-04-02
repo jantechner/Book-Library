@@ -14,16 +14,12 @@ public class GetBookVisitor implements Visitor{
 
     @Override
     public String visit(Library library) {
-        Book foundBook = findBook(isbn, library);
-        return JsonUtils.toJsonString(foundBook);
-    }
-
-    private Book findBook(String number, Library library) {
+        Book foundBook = null;
         for (Book book : library.books()) {
-            if (book.getIsbn().equals(number)) {
-                return book;
+            if (book.getIsbn().equals(isbn)) {
+                foundBook = book;
             }
         }
-        return null;
+        return JsonUtils.toJsonString(foundBook);
     }
 }
