@@ -6,4 +6,6 @@ mvn package clean
 Running
 
 After building the application run following command to start it:
-java -jar target/BookLibrary.jar
+java -jar target/BookLibrary.jar src/main/resources/books.json file
+or
+java -jar target/BookLibrary.jar src/main/resources/books.json remote
